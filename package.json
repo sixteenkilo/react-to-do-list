@@ -22,6 +22,7 @@
   "devDependencies": {
     "@babel/core": "^7.29.0",
     "@eslint/js": "^9.39.4",
+    "@react-router/dev": "^7.14.1",
     "@rolldown/plugin-babel": "^0.2.2",
     "@types/babel__core": "^7.20.5",
     "@types/node": "^24.12.2",
