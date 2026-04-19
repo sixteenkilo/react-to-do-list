@@ -6,9 +6,12 @@ import {
     ListItemIcon,
     ListItemText,
     Toolbar,
+    Button,
+    Box,
 } from "@mui/material";
-import { ChecklistRounded } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { ChecklistRounded, AddCircleOutlined } from "@mui/icons-material";
+import { useState } from "react";
+import { CreateProject } from "./CreateProejct";
 
 const DRAWER_WIDTH = 240;
 
@@ -17,7 +20,10 @@ interface Props {
 }
 
 export const Aside = ({ open }: Props) => {
-    const navigate = useNavigate();
+    const [openDialog, setOpenDialog] = useState(false);
+
+    const show = () => setOpenDialog(true);
+    const hide = () => setOpenDialog(false);
 
     return (
         <Drawer
@@ -29,13 +35,16 @@ export const Aside = ({ open }: Props) => {
                 "& .MuiDrawer-paper": {
                     width: DRAWER_WIDTH,
                     boxSizing: "border-box",
+                    display: "flex",
+                    flexDirection: "column",
                 },
             }}
         >
             <Toolbar />
-            <List>
+
+            <List sx={{ flexGrow: 1 }}>
                 <ListItem disablePadding>
-                    <ListItemButton onClick={() => navigate("/")}>
+                    <ListItemButton>
                         <ListItemIcon>
                             <ChecklistRounded />
                         </ListItemIcon>
@@ -43,6 +52,23 @@ export const Aside = ({ open }: Props) => {
                     </ListItemButton>
                 </ListItem>
             </List>
+
+            <Box sx={{ p: 2 }}>
+                <Button
+                    variant="contained"
+                    fullWidth
+                    size="large"
+                    startIcon={<AddCircleOutlined />}
+                    onClick={show}
+                >
+                    Создать проект
+                </Button>
+            </Box>
+
+            <CreateProject
+                open={openDialog}
+                close={hide}
+            />
         </Drawer>
     );
 };
