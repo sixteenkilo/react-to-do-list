@@ -8,6 +8,8 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Close } from "@mui/icons-material";
+import { useState } from "react";
+import { useProjectStore } from "../store/project";
 
 export const CreateProject = ({
     open,
@@ -16,6 +18,23 @@ export const CreateProject = ({
     open: boolean;
     close: () => void;
 }) => {
+    const { addProject } = useProjectStore();
+    const [form, setForm] = useState<{ title: string; description: string }>({
+        title: "",
+        description: "",
+    });
+    const [errorTitle, setErrorTitle] = useState<boolean>(false);
+
+    const createProject = () => {
+        console.log("create");
+        if (form.title.trim().length <= 0) {
+            setErrorTitle(true);
+            return;
+        }
+
+        addProject(form.title, form.description);
+        close();
+    };
     return (
         <Dialog
             open={open}
@@ -60,6 +79,16 @@ export const CreateProject = ({
                         variant="outlined"
                         fullWidth
                         autoFocus
+                        value={form.title}
+                        onChange={(e) => {
+                            setErrorTitle(false);
+                            setForm({ ...form, title: e.currentTarget.value });
+                        }}
+                        required
+                        error={errorTitle}
+                        helperText={
+                            errorTitle ? "Название не может быть пустым" : ""
+                        }
                     />
                     <TextField
                         label="Описание"
@@ -67,6 +96,13 @@ export const CreateProject = ({
                         fullWidth
                         multiline
                         rows={3}
+                        value={form.description}
+                        onChange={(e) =>
+                            setForm({
+                                ...form,
+                                description: e.currentTarget.value,
+                            })
+                        }
                     />
                 </Box>
             </DialogContent>
@@ -80,7 +116,7 @@ export const CreateProject = ({
                 </Button>
                 <Button
                     variant="contained"
-                    onClick={close}
+                    onClick={createProject}
                 >
                     Создать
                 </Button>
